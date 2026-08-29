@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
+  <meta name="theme-color" content="#0b1220" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="description" content="Crypto trading signals — 15m confluence scanner with live TP/SL tracking" />
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <title>Signal Desk</title>
+  <link rel="stylesheet" href="/static/css/app.css" />
+</head>
+<body>
+  <div class="app">
+    <!-- Top bar -->
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">◈</div>
+        <div>
+          <h1>Signal Desk <span id="modePill" class="mode-pill hidden">DEMO</span></h1>
+          <p class="sub" id="scanMeta">Booting…</p>
+        </div>
+      </div>
+      <div class="top-actions">
+        <button class="icon-btn" id="btnRefresh" title="Refresh" aria-label="Refresh">↻</button>
+        <button class="icon-btn accent" id="btnScan" title="Force scan" aria-label="Scan">⌁</button>
+      </div>
+    </header>
+
+    <!-- Stats strip -->
+    <section class="stats" id="statsRow" aria-label="Performance">
+      <div class="stat">
+        <span class="stat-val" id="sActive">—</span>
+        <span class="stat-lbl">Active</span>
+      </div>
+      <div class="stat win">
+        <span class="stat-val" id="sWins">—</span>
+        <span class="stat-lbl">Wins</span>
+      </div>
+      <div class="stat loss">
+        <span class="stat-val" id="sLosses">—</span>
+        <span class="stat-lbl">Losses</span>
+      </div>
+      <div class="stat">
+        <span class="stat-val" id="sWinRate">—</span>
+        <span class="stat-lbl">Win %</span>
+      </div>
+      <div class="stat">
+        <span class="stat-val" id="sExpired">—</span>
+        <span class="stat-lbl">Expired</span>
+      </div>
+      <div class="stat">
+        <span class="stat-val" id="sAvgRR">—</span>
+        <span class="stat-lbl">Avg RR</span>
+      </div>
+    </section>
+
+    <!-- Tabs -->
+    <nav class="tabs" role="tablist">
+      <button class="tab active" data-tab="active" role="tab" aria-selected="true">Live</button>
+      <button class="tab" data-tab="history" role="tab">History</button>
+      <button class="tab" data-tab="stats" role="tab">Stats</button>
+    </nav>
+
+    <!-- Filters -->
+    <div class="filters" id="filtersBar">
+      <select id="fStatus" aria-label="Status filter">
+        <option value="all">All status</option>
+        <option value="active">Active</option>
+        <option value="win">Win</option>
+        <option value="loss">Loss</option>
+        <option value="expired">Expired</option>
+      </select>
+      <select id="fDir" aria-label="Direction filter">
+        <option value="all">Long + Short</option>
+        <option value="LONG">Long only</option>
+        <option value="SHORT">Short only</option>
+      </select>
+      <input type="search" id="fSymbol" placeholder="Search pair…" autocomplete="off" />
+    </div>
+
+    <!-- Content panes -->
+    <main class="content">
+      <section id="pane-active" class="pane active" role="tabpanel">
+        <div id="activeList" class="card-grid"></div>
+        <div id="activeEmpty" class="empty hidden">
+          <div class="empty-ico">◎</div>
+          <h3>No active signals</h3>
+          <p>Scanner runs every 15 minutes at candle close. Tap ⌁ to force a scan now.</p>
+        </div>
+      </section>
+
+      <section id="pane-history" class="pane" role="tabpanel">
+        <div id="historyList" class="card-grid"></div>
+        <div id="historyEmpty" class="empty hidden">
+          <div class="empty-ico">☰</div>
+          <h3>No history yet</h3>
+          <p>Closed signals (win / loss / expired) will appear here.</p>
+        </div>
+      </section>
+
+      <section id="pane-stats" class="pane" role="tabpanel">
+        <div class="stats-panel" id="statsPanel">
+          <div class="panel-card">
+            <h3>Overview</h3>
+            <div class="kv" id="overviewKv"></div>
+          </div>
+          <div class="panel-card">
+            <h3>By direction</h3>
+            <div id="byDir" class="bars"></div>
+          </div>
+          <div class="panel-card">
+            <h3>Top pairs</h3>
+            <div id="topPairs" class="table-wrap"></div>
+          </div>
+          <div class="panel-card" id="strongestCard">
+            <h3>Strongest live signal</h3>
+            <div id="strongest"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>Trend pullback · 15m + 1h confluence · ATR risk</span>
+      <span id="clock"></span>
+    </footer>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <!-- Signal detail sheet -->
+  <div id="sheet" class="sheet" aria-hidden="true">
+    <div class="sheet-backdrop" data-close></div>
+    <div class="sheet-panel" role="dialog" aria-modal="true">
+      <div class="sheet-handle"></div>
+      <div id="sheetBody"></div>
+    </div>
+  </div>
+
+  <script src="/static/js/app.js" defer></script>
+</body>
+</html>
