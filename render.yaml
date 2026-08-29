@@ -1,0 +1,21 @@
+# Render Blueprint — https://render.com
+# Free web service sleeps after ~15 min idle. Use a free cron ping or upgrade
+# if you need uninterrupted 15m scans. Outbound Binance HTTPS works on free tier.
+services:
+  - type: web
+    name: signal-desk
+    runtime: python
+    plan: free
+    region: singapore
+    buildCommand: pip install -r requirements.txt
+    startCommand: python run.py
+    healthCheckPath: /api/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11.9"
+      - key: HOST
+        value: "0.0.0.0"
+      - key: FORCE_DEMO
+        value: "0"
+      - key: PORT
+        generateValue: false
