@@ -15,7 +15,7 @@ Open **one link** on your phone — that's it.
 | **Tracker** | Every 20s price poll → mark TP hit / SL hit / expired (3h) |
 | **UI** | Single-page mobile PWA-style dashboard |
 
-## Quick start
+## Quick start (local)
 
 ```bash
 python3 -m venv .venv
@@ -31,7 +31,7 @@ Then open: **http://\<host\>:8000/** on any phone or desktop.
 | Var | Default | Meaning |
 |---|---|---|
 | `HOST` | `0.0.0.0` | Bind address |
-| `PORT` | `8000` | HTTP port |
+| `PORT` | `8000` | HTTP port (Render/Railway/Fly inject this) |
 | `RELOAD` | `0` | Uvicorn auto-reload |
 | `FORCE_DEMO` | unset | `1` = always use synthetic market data |
 | `BINANCE_BASE` | `https://api.binance.com` | Override exchange REST base |
@@ -39,6 +39,26 @@ Then open: **http://\<host\>:8000/** on any phone or desktop.
 No exchange API key required — public Binance market data only.
 
 If Binance is unreachable (firewall / geo / sandbox), the system **automatically falls back to a realistic demo market** so the dashboard, scanner, and win/loss tracker still work. A **DEMO** badge appears in the header.
+
+## Deploy free (one mobile link)
+
+Ready-made configs:
+
+| File | Platform |
+|---|---|
+| `Dockerfile` | Any container host |
+| `fly.toml` | **Fly.io** (recommended always-on) |
+| `koyeb.yaml` | Koyeb free nano |
+| `render.yaml` | Render free (+ keep-warm ping) |
+| `railway.toml` | Railway trial |
+| `Procfile` / `runtime.txt` | Generic PaaS |
+
+Full steps: **[docs/DEPLOY.md](docs/DEPLOY.md)**  
+Copy-paste brief for another GPT agent: **[docs/GPT_DEPLOY_BRIEF.md](docs/GPT_DEPLOY_BRIEF.md)**  
+Malay one-block prompt: **[docs/PROMPT_UNTUK_GPT.txt](docs/PROMPT_UNTUK_GPT.txt)**
+
+**Free host preference:** Fly.io → Koyeb → Render+ping → Railway.  
+Avoid Vercel/Netlify/Workers (no long-lived scheduler).
 
 ## API
 

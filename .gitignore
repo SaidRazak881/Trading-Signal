@@ -11,8 +11,13 @@ data/
 *.db-wal
 *.db-shm
 .env
+.env.*
+!.env.example
 .DS_Store
 dist/
 build/
 .idea/
 .vscode/
+.fly/
+.railway/
+.koyeb/

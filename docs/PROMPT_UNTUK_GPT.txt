@@ -1,0 +1,81 @@
+================================================================================
+SALIN SEMUA DI BAWAH INI → TAMPAL DALAM CHAT GPT (satu mesej)
+================================================================================
+
+Peranan: Senior DevOps + Python engineer.
+
+Tugas: Deploy sistem "Signal Desk" (crypto trading signal) dari GitHub ke
+hosting PERCUMA supaya saya boleh buka SATU link HTTPS dari telefon.
+
+Repo: https://github.com/SaidRazak881/Trading-Signal
+Branch: arena/01a04e6d-trading-signal
+(Jika main belum ada kod app, merge branch ni ke main dulu atau deploy branch ni terus.)
+
+FAKTA APP
+- Python 3.11, FastAPI, Uvicorn, APScheduler, SQLite, pandas
+- Start command: python run.py
+- Bind: 0.0.0.0 dan PORT dari environment
+- Health: GET /api/health
+- Dashboard mobile: GET /
+- Force scan: POST /api/scan
+- Stats: GET /api/stats
+- Active signals: GET /api/signals/active
+- Tiada Binance API key (public market data sahaja)
+- Env penting: FORCE_DEMO=0 (live), HOST=0.0.0.0
+- SQLite di ./data/signals.db — mount volume ke /app/data jika platform support
+- Repo sudah ada: Dockerfile, Procfile, fly.toml, render.yaml, railway.toml,
+  koyeb.yaml, runtime.txt, docs/DEPLOY.md, docs/GPT_DEPLOY_BRIEF.md
+
+PILIHAN HOST PERCUMA (cuba ikut order, berhenti bila berjaya)
+1. Fly.io — always-on + volume (PALING DISYORKAN)
+2. Koyeb free nano — always-on
+3. Render free web — BOLEH tapi sleep ~15 min; WAJIB setup cron ping
+   setiap 10 min ke /api/health (cron-job.org free)
+4. Railway free trial — jangka pendek
+JANGAN guna: Vercel, Netlify, Cloudflare Workers, GitHub Pages
+(sebab tiada long-running scheduler).
+
+REGION: utamakan Singapore (sin), kemudian Tokyo, kemudian US.
+
+LANGKAH WAJIB (laksana, jangan cuma bagi advice)
+1. Baca README.md, docs/DEPLOY.md, run.py, app/main.py, deploy configs.
+2. Pilih platform free terbaik; login/CLI mengikut keperluan.
+3. Deploy dengan config sedia ada. FORCE_DEMO=0.
+4. Jika Binance blocked: tukar region; jika masih gagal, report dan
+   hanya then FORCE_DEMO=1.
+5. Jika platform sleep (Render): setup keep-warm ping free.
+6. Verify:
+   curl -s https://URL/api/health
+   curl -s https://URL/api/stats
+   curl -s -X POST https://URL/api/scan
+   curl -s https://URL/api/signals/active
+7. Pastikan GET / return HTML dashboard (mobile OK).
+8. Commit deploy fixes jika perlu; JANGAN commit .venv, secrets, *.db.
+9. Return report format di bawah.
+
+SUCCESS CRITERIA
+- [ ] HTTPS URL buka di phone
+- [ ] /api/health status=ok
+- [ ] data_mode=live (preferred) atau demo dengan penjelasan
+- [ ] Scan jalan; signal/history nampak di UI
+- [ ] Document sleep limits + cara tengok logs
+
+FORMAT JAWAPAN AKHIR
+## Deploy result
+- URL:
+- Platform + plan:
+- Region:
+- Data mode: LIVE | DEMO
+- Volume persist: yes/no
+- Sleep/ping:
+
+## Verify commands & output
+## Ops (logs, redeploy, force scan)
+## Limits / risks
+
+Budget: RM0 / $0. Jangan minta saya bayar. Jika platform perlukan card
+untuk free tier, pilih alternatif free tanpa card (Koyeb/Render).
+
+================================================================================
+TAMAT PROMPT
+================================================================================
