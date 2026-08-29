@@ -1,0 +1,155 @@
+================================================================================
+SALIN SEMUA DI BAWAH INI → TAMPAL SEBAGAI MESEJ PERTAMA DALAM CHAT GPT
+(Repo GitHub + akaun Koyeb sudah dilink — jangan tanya saya buat semula)
+================================================================================
+
+You are a senior DevOps engineer. Execute a full deploy end-to-end. Do not only
+give advice — create/fix the Koyeb service, fix build issues, verify the live
+URL, and report back.
+
+## Context (already done by the human — do NOT ask them to repeat)
+- GitHub repo is connected to you: https://github.com/SaidRazak881/Trading-Signal
+- Koyeb account is linked to that GitHub repo
+- Budget: $0 — use Koyeb **Free** instance only
+- Goal: ONE public HTTPS URL that opens on a mobile phone
+
+## App facts
+- Name: Signal Desk (crypto trading signal scanner + mobile HTML dashboard)
+- Stack: Python 3.11, FastAPI, Uvicorn, APScheduler, pandas, SQLite
+- Start command: `python run.py`
+- Binds: `0.0.0.0` and respects `PORT` env (Koyeb may inject PORT)
+- Health check path: `/api/health`
+- Dashboard: `GET /`
+- Force scan: `POST /api/scan`
+- Stats: `GET /api/stats`
+- Active signals: `GET /api/signals/active`
+- No Binance API keys (public REST only)
+- SQLite file: `./data/signals.db` (ephemeral on free Koyeb is OK — document it)
+- Repo deploy helpers: `Dockerfile`, `Procfile`, `runtime.txt`, `koyeb.yaml`,
+  `docs/DEPLOY.md`, `requirements.txt`
+
+## CRITICAL branch issue
+- Full app code is on branch: `arena/01a04e6d-trading-signal`
+- Branch `main` may still be the empty initial commit only
+- You MUST deploy from `arena/01a04e6d-trading-signal`
+  OR merge that branch into `main` and deploy `main`
+- If you deploy `main` without the app, the build will be wrong — check
+  that `run.py`, `app/main.py`, `frontend/index.html`, `requirements.txt`
+  exist on the branch you deploy
+
+## Koyeb deploy settings (use exactly)
+- Platform: Koyeb only (already linked)
+- Instance type: **Free** / nano free
+- Service type: Web service
+- Builder preference (try in order):
+  1. **Dockerfile** (repo root `Dockerfile`) — preferred
+  2. If Docker fails: native Python buildpack
+     - Build: `pip install -r requirements.txt`
+     - Run: `python run.py`
+- HTTP port: `8000` (container listens on 8000; if Koyeb sets PORT, app
+  already reads PORT from env — if health fails, set env PORT=8000 or
+  align Koyeb target port with app)
+- Min instances: 1 (always-on free)
+- Region preference: **Singapore** if available, else Frankfurt, else Washington
+- Auto-deploy on git push: ON (optional but good)
+
+### Environment variables
+```
+HOST=0.0.0.0
+FORCE_DEMO=0
+PYTHONUNBUFFERED=1
+```
+Do NOT set Binance keys.  
+Do NOT set FORCE_DEMO=1 unless health proves Binance is blocked from Koyeb.
+
+### Health check
+- Path: `/api/health`
+- Expect JSON: `{"status":"ok", ...}`
+
+## Execution steps (mandatory order)
+1. Inspect the repo/branch. Confirm app files exist. If only on
+   `arena/01a04e6d-trading-signal`, either:
+   - select that branch in Koyeb service settings, OR
+   - merge to `main` via PR/merge commit and deploy `main`
+2. Create (or update) a Koyeb app/service named e.g. `signal-desk`
+   from the GitHub repo with the settings above.
+3. Trigger deploy. Watch build logs. Fix failures by committing minimal
+   fixes to the same working branch (Dockerfile/port/start command only).
+   Never commit `.venv/`, `data/*.db`, secrets, or `__pycache__/`.
+4. When service is RUNNING, get the public HTTPS URL
+   (usually `https://<name>-<hash>.koyeb.app`).
+5. Verify with curl:
+   ```bash
+   curl -sS https://URL/api/health
+   curl -sS https://URL/api/stats
+   curl -sS -o /dev/null -w "%{http_code}" https://URL/
+   curl -sS -X POST https://URL/api/scan
+   sleep 25
+   curl -sS https://URL/api/signals/active
+   ```
+6. Check `data_mode` / `demo` from `/api/health`:
+   - Wanted: `"demo": false` or `"data_mode": "live"`
+   - If demo/true: retry another Koyeb region first; only then explain
+     LIVE unavailable and optionally FORCE_DEMO=1
+7. Confirm dashboard HTML loads (title/Signal Desk). Mobile-friendly single page.
+
+## Success criteria
+- [ ] Public HTTPS URL works on phone
+- [ ] `GET /api/health` → status ok
+- [ ] Prefer LIVE Binance data
+- [ ] `POST /api/scan` works; signals or clean empty state with last_scan meta
+- [ ] Free instance (no paid plan)
+- [ ] You paste the final URL clearly at the top of your reply
+
+## If build fails — common fixes (apply yourself)
+- Wrong branch / empty main → switch branch or merge
+- Port mismatch → ensure Koyeb route targets port 8000; app uses PORT env
+- Python version → 3.11 (runtime.txt / Dockerfile already 3.11)
+- pandas/numpy wheel → use Dockerfile path (python:3.11-slim)
+- Health check failing during boot → increase grace period; first scan is OK
+  to run after listen; health endpoint must respond without waiting for scan
+- 502 after deploy → read runtime logs; confirm `python run.py` is start cmd
+
+## Do NOT
+- Ask me to create Koyeb or GitHub link again
+- Switch to Render/Fly/Vercel unless Koyeb is impossible (explain why first)
+- Use serverless
+- Charge / upgrade to paid
+- Rewrite the trading strategy
+- Expose or request any exchange API secrets
+
+## Final reply format (mandatory)
+```
+## Deploy result
+- URL: https://...
+- Platform: Koyeb Free
+- Region: ...
+- Branch deployed: ...
+- Data mode: LIVE | DEMO
+- SQLite: ephemeral (resets on redeploy) | other
+- Always-on: yes/no
+
+## What I did
+- (short bullet steps)
+
+## Verify
+- /api/health => ...
+- / => HTTP ...
+- /api/scan => ...
+- active signals count => ...
+
+## Ops
+- Logs: how to open in Koyeb dashboard
+- Redeploy: ...
+- Force scan: curl -X POST https://URL/api/scan
+
+## Limits / risks
+- free tier limits, ephemeral disk, etc.
+```
+
+Start now. First action: confirm which branch contains `run.py` and deploy
+that branch to Koyeb Free.
+
+================================================================================
+TAMAT PROMPT — TAMPAK HABIS DI SINI
+================================================================================
