@@ -40,6 +40,18 @@ No exchange API key required — public Binance market data only.
 
 If Binance is unreachable (firewall / geo / sandbox), the system **automatically falls back to a realistic demo market** so the dashboard, scanner, and win/loss tracker still work. A **DEMO** badge appears in the header.
 
+
+## Deploy on Koyeb (1 click — recommended)
+
+You logged into Koyeb with GitHub. Use the same flow as the [official FastAPI guide](https://www.koyeb.com/docs/deploy/fastapi):
+
+[![Deploy to Koyeb](https://www.koyeb.com/static/images/deploy/button.svg)](https://app.koyeb.com/deploy?type=git&builder=buildpack&repository=github.com/SaidRazak881/Trading-Signal&branch=arena/01a04e6d-trading-signal&name=signal-desk&run_command=uvicorn%20app.main%3Aapp%20--host%200.0.0.0%20--port%208000&ports=8000%3Bhttp%3B%2F&instance_type=free&env%5BHOST%5D=0.0.0.0&env%5BFORCE_DEMO%5D=0&env%5BPYTHONUNBUFFERED%5D=1&service_type=web)
+
+**Full guide:** [docs/KOYEB_CLICK.md](docs/KOYEB_CLICK.md)
+
+After deploy opens `*.koyeb.app` on your phone. Health: `/api/health`.
+
+---
 ## One-click deploy (Koyeb Free)
 
 Login Koyeb with GitHub, then open this link:

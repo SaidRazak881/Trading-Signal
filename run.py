@@ -12,9 +12,11 @@ import uvicorn
 
 
 def main() -> None:
+    # Koyeb / PaaS inject PORT; always bind 0.0.0.0 for public HTTP
     host = os.environ.get("HOST", "0.0.0.0")
     port = int(os.environ.get("PORT", "8000"))
     reload = os.environ.get("RELOAD", "0") == "1"
+    print(f"Starting Signal Desk on {host}:{port}", flush=True)
     uvicorn.run(
         "app.main:app",
         host=host,
