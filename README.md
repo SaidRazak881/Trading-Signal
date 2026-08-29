@@ -40,6 +40,24 @@ No exchange API key required — public Binance market data only.
 
 If Binance is unreachable (firewall / geo / sandbox), the system **automatically falls back to a realistic demo market** so the dashboard, scanner, and win/loss tracker still work. A **DEMO** badge appears in the header.
 
+## One-click deploy (Koyeb Free)
+
+Login Koyeb with GitHub, then open this link:
+
+**[Deploy Signal Desk to Koyeb](https://app.koyeb.com/deploy?type=git&name=signal-desk&repository=github.com%2FSaidRazak881%2FTrading-Signal&branch=arena%2F01a04e6d-trading-signal&builder=dockerfile&dockerfile=Dockerfile&ports=8000%3Bhttp%3B%2F&instance_type=free&env%5BHOST%5D=0.0.0.0&env%5BFORCE_DEMO%5D=0&env%5BPYTHONUNBUFFERED%5D=1&service_type=web)**
+
+Or paste URL:
+```
+https://app.koyeb.com/deploy?type=git&name=signal-desk&repository=github.com%2FSaidRazak881%2FTrading-Signal&branch=arena%2F01a04e6d-trading-signal&builder=dockerfile&dockerfile=Dockerfile&ports=8000%3Bhttp%3B%2F&instance_type=free&env%5BHOST%5D=0.0.0.0&env%5BFORCE_DEMO%5D=0&env%5BPYTHONUNBUFFERED%5D=1&service_type=web
+```
+
+Pre-filled: branch, Dockerfile, port 8000, Free instance, env. Review → **Deploy** → open `*.koyeb.app` on phone.
+
+Fallback (buildpack if Docker build fails):
+```
+https://app.koyeb.com/deploy?type=git&name=signal-desk&repository=github.com%2FSaidRazak881%2FTrading-Signal&branch=arena%2F01a04e6d-trading-signal&builder=buildpack&run_command=python%20run.py&ports=8000%3Bhttp%3B%2F&instance_type=free&env%5BHOST%5D=0.0.0.0&env%5BFORCE_DEMO%5D=0&env%5BPYTHONUNBUFFERED%5D=1&service_type=web
+```
+
 ## Deploy free (one mobile link)
 
 Ready-made configs:
